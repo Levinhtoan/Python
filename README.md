@@ -1,34 +1,88 @@
-# 🐍 Python Learning & Booking API Project
+# 📅 Booking & Scheduling Management System
 
-Dự án học lập trình Python từ cơ bản đến nâng cao và xây dựng REST API bằng FastAPI.
+Dự án mẫu quản lý đặt lịch hẹn thực tế được xây dựng theo kiến trúc **Clean Architecture** và chuẩn **`src-layout`** chuẩn mực của Python Packaging (tham khảo [PYTHON_PROJECT_STRUCTURE.md](file:///e:/Booking-SchedulingManagement/PYTHON_PROJECT_STRUCTURE.md)).
 
-## 📂 Cấu Trúc Thư Mục
+---
 
-- `Tai_Lieu_Hoc_Python.md`: Tài liệu hướng dẫn học Python toàn diện (Cơ bản -> Nâng cao).
-- `booking_cli.py`: Ứng dụng Quản lý đặt lịch hẹn dạng dòng lệnh (CLI Console).
-- `main.py`: REST API Quản lý đặt lịch xây dựng bằng **FastAPI** và **Pydantic**.
-- `test_api.py`: Script kiểm thử API bằng thư viện `requests`.
-- `requirements.txt`: Danh sách các thư viện cần thiết.
+## 🌟 Tính Năng Chính
 
-## 🚀 Hướng Dẫn Cài Đặt & Chạy
+- **RESTful API (FastAPI)**: Đầy đủ CRUD đặt lịch, hủy lịch, xem danh sách và Swagger UI interactive docs (`/docs`).
+- **Giao diện CLI**: Menu console trực quan tương tác trực tiếp với tầng Service.
+- **Phân tầng Clean Architecture**:
+  - `schemas`: DTO / Data Validation với Pydantic v2.
+  - `repositories`: Trừu tượng hóa việc lưu trữ (JSON file storage & Base interface).
+  - `services`: Xử lý toàn bộ logic nghiệp vụ (Business logic độc lập).
+  - `api`: Fast, clean routing và dependency injection.
+- **Kiểm thử tự động (Pytest)**: Unit tests cho tầng service và Integration tests cho API endpoints.
+- **Docker & CI/CD**: Hỗ trợ Dockerfile, Docker Compose và GitHub Actions Workflow.
 
-### 1. Tạo môi trường ảo & cài đặt thư viện
+---
+
+## 📂 Cấu Trúc Dự Án
+
+```text
+Booking-SchedulingManagement/
+├── .github/workflows/tests.yml   # CI/CD Tự động chạy Unit Test
+├── data/bookings.json            # File lưu trữ dữ liệu
+├── requirements/
+│   ├── base.txt                  # Thư viện runtime chính
+│   └── dev.txt                   # Thư viện cho môi trường dev & test
+├── src/
+│   └── booking_app/
+│       ├── api/                  # Tầng giao tiếp HTTP (Routers, Endpoints, Deps)
+│       ├── core/                 # Cấu hình hệ thống (Settings, Custom Exceptions)
+│       ├── models/ & schemas/    # Pydantic Schemas & DTOs
+│       ├── repositories/         # Tầng lưu trữ dữ liệu (Repository Pattern)
+│       ├── services/             # Tầng nghiệp vụ cốt lõi (Business Logic)
+│       ├── main.py               # Entrypoint FastAPI Server
+│       └── cli.py                # Entrypoint Giao diện dòng lệnh
+├── tests/
+│   ├── conftest.py               # Fixtures dùng chung cho pytest
+│   ├── unit/                     # Unit test cho Service Layer
+│   └── integration/              # Integration test cho API Routes
+├── .env.example                  # Template biến môi trường
+├── Dockerfile & docker-compose.yml
+├── pyproject.toml                # Cấu hình dự án & Pytest
+├── run_api.py                    # Script chạy nhanh FastAPI server
+└── run_cli.py                    # Script chạy nhanh CLI console
+```
+
+---
+
+## 🚀 Hướng Dẫn Cài Đặt & Khởi Chạy
+
+### 1. Kích hoạt môi trường ảo (Virtual Environment)
 ```bash
-python -m venv venv
-# Kích hoạt trên Windows:
+# Trên Windows:
 .\venv\Scripts\activate
 
-# Cài đặt thư viện:
-pip install -r requirements.txt
+# Trên Linux/macOS:
+source venv/bin/activate
 ```
 
-### 2. Chạy API FastAPI
+### 2. Cài đặt thư viện
 ```bash
-python main.py
+pip install -r requirements/dev.txt
 ```
-Truy cập tài liệu API tương tác tại: **http://127.0.0.1:8000/docs**
 
-### 3. Chạy ứng dụng CLI
+### 3. Chạy API Server
 ```bash
-python booking_cli.py
+python run_api.py
+```
+- Truy cập Swagger API Docs tại: **http://127.0.0.1:8000/docs**
+- Trang chủ API: **http://127.0.0.1:8000/**
+
+### 4. Chạy Giao diện CLI Console
+```bash
+python run_cli.py
+```
+
+### 5. Chạy Automated Tests (Pytest)
+```bash
+pytest
+```
+
+### 6. Khởi chạy bằng Docker Compose
+```bash
+docker-compose up -d --build
 ```
