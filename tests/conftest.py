@@ -27,9 +27,27 @@ def test_service(test_repo):
     return BookingService(repository=test_repo)
 
 @pytest.fixture
+def test_postgres_repo():
+    """Fixture cung cấp PostgresBookingRepository sử dụng SQLite in-memory database để test."""
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from booking_app.db.session import Base
+    from booking_app.repositories.postgres_repository import PostgresBookingRepository
+    import booking_app.models.booking  # noqa: F401
+
+    engine = create_engine("sqlite:///:memory:", connect_args={"check_same_thread": False})
+    Base.metadata.create_all(bind=engine)
+    testing_session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    
+    repo = PostgresBookingRepository(session_factory=testing_session_local)
+    yield repo
+    Base.metadata.drop_all(bind=engine)
+
+@pytest.fixture
 def client(test_service):
     """TestClient cho FastAPI với mocked service."""
     app = create_app()
     app.dependency_overrides[get_booking_service] = lambda: test_service
     with TestClient(app) as test_client:
         yield test_client
+

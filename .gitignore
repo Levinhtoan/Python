@@ -38,3 +38,8 @@ venv.bak/
 *.sqlite3
 *.log
 bookings.json
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+

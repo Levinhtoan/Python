@@ -160,7 +160,7 @@ Python có 4 kiểu cấu trúc dữ liệu dựng sẵn cực kỳ mạnh mẽ:
 ```python
 # 1. List (Danh sách)
 services = ["Cắt tóc", "Gội đầu", "Massage"]
-services.append("Nhuộm tóc")
+services.append("Nhuộm tóc") //thêm vào cuối phần tử
 services.remove("Gội đầu")
 
 # 2. Dictionary (Từ điển - Key-Value)
